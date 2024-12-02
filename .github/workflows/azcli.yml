@@ -7,9 +7,6 @@ permissions:
 on:
     workflow_call:
         inputs:
-          Environment:
-            required: true
-            type: string
           ResourceGroupName:
             required: true
             type: string
@@ -26,7 +23,6 @@ on:
 
 jobs:
     Deploy:
-        environment: ${{ inputs.Environment }}
         name: Deploy via az cli with OIDC login
         runs-on: ubuntu-latest
         steps:
