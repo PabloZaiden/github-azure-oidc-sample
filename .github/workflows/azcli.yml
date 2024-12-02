@@ -2,6 +2,7 @@ name: az cli deployment
 
 permissions:
   id-token: write
+  contents: read
 
 on:
     workflow_call:
@@ -25,7 +26,7 @@ on:
 
 jobs:
     Deploy:
-        #environment: ${{ inputs.Environment }}
+        environment: ${{ inputs.Environment }}
         name: Deploy via az cli with OIDC login
         runs-on: ubuntu-latest
         steps:
@@ -40,6 +41,6 @@ jobs:
                 subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
             
             - name: Deploy
-              run: ./azcli.sh ${{ inputs.ResourceGroupName }} ${{ inputs.Location }}
+              run: ./azcli/deploy.sh ${{ inputs.ResourceGroupName }} ${{ inputs.Location }}
             
 

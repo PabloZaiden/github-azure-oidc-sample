@@ -14,6 +14,7 @@ jobs:
     uses: ./.github/workflows/azcli.yml
     permissions:
       id-token: write
+      contents: read
     with:
       Environment: sample
       Location: ${{ vars.LOCATION }}
