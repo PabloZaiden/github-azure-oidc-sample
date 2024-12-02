@@ -25,7 +25,7 @@ on:
 
 jobs:
     Deploy:
-        environment: ${{ inputs.Environment }}
+        #environment: ${{ inputs.Environment }}
         name: Deploy via az cli with OIDC login
         runs-on: ubuntu-latest
         steps:
