@@ -1,0 +1,45 @@
+name: az cli deployment
+
+permissions:
+  id-token: write
+
+on:
+    workflow_call:
+        inputs:
+          Environment:
+            required: true
+            type: string
+          ResourceGroupName:
+            required: true
+            type: string
+          Location:
+            required: true
+            type: string
+        secrets:
+          AZURE_CLIENT_ID:
+            required: true
+          AZURE_TENANT_ID:
+            required: true
+          AZURE_SUBSCRIPTION_ID:
+            required: true
+
+jobs:
+    Deploy:
+        environment: ${{ inputs.Environment }}
+        name: Deploy via az cli with OIDC login
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            
+            - name: Azure Login
+              uses: azure/login@v2
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            
+            - name: Deploy
+              run: ./azcli.sh ${{ inputs.ResourceGroupName }} ${{ inputs.Location }}
+            
+

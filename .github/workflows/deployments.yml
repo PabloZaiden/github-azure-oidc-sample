@@ -10,10 +10,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
+  DeployWithAzCli:
+    uses: ./.github/workflows/azcli.yml
+    permissions:
+      id-token: write
+    with:
+      Environment: sample
+      Location: ${{ vars.LOCATION }}
+      ResourceGroupName: ${{ vars.RESOURCE_GROUP_NAME }}
+    secrets: 
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       
