@@ -23,8 +23,17 @@ fi
 echo "Read the current subscription"
 subscriptionId=$(az account show --query id -o tsv)
 
-echo "Create an Entra App with service principal and make it subscription contributor"
-spValues=$(az ad sp create-for-rbac --role contributor --scopes /subscriptions/$subscriptionId)
+randomId=$(uuidgen)
+
+# substitute with env variables the customRole.json file into a new file in the temp folder
+tempCustomRoleFileName="/tmp/customRole-$randomId.json"
+SUBSCRIPTION_ID=$subscriptionId RANDOM_ID=$randomId envsubst < customRole.json > $tempCustomRoleFileName
+
+echo "File name: $tempCustomRoleFileName"
+
+az role definition create --role-definition $tempCustomRoleFileName
+echo "Create an Entra App with service principal and assign it the custom role"
+spValues=$(az ad sp create-for-rbac --role ResourceGroupCreator-$randomId --scopes /subscriptions/$subscriptionId)
 
 appId=$(echo $spValues | jq -r .appId)
 tenantId=$(echo $spValues | jq -r .tenant)
