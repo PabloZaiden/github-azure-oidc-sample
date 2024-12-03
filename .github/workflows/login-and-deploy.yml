@@ -1,0 +1,49 @@
+name: login and deploy
+
+permissions:
+  id-token: write
+  contents: read
+
+on:
+    workflow_call:
+        inputs:
+          Environment:
+            required: true
+            type: string
+          DeployTool:
+            required: true
+            type: string
+          ResourceGroupName:
+            required: true
+            type: string
+          Location:
+            required: true
+            type: string
+        secrets:
+          AZURE_CLIENT_ID:
+            required: true
+          AZURE_TENANT_ID:
+            required: true
+          AZURE_SUBSCRIPTION_ID:
+            required: true
+
+jobs:
+    Deploy:
+        name: Deploy via ${{ inputs.DeployTool }} OIDC login
+        runs-on: ubuntu-latest
+        environment: ${{ inputs.Environment }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            
+            - name: Azure Login
+              uses: azure/login@v2
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            
+            - name: Deploy
+              run: ./${{ inputs.DeployTool }}/deploy.sh ${{ inputs.ResourceGroupName }} ${{ inputs.Location }}
+            
+

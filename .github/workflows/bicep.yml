@@ -1,4 +1,4 @@
-name: Deployments
+name: Deployment with Bicep
 
 permissions:
   id-token: write
@@ -15,14 +15,16 @@ on:
 
 jobs:
   DeployWithAzCli:
-    uses: ./.github/workflows/azcli.yml
+    uses: ./.github/workflows/login-and-deploy.yml
     with:
       Environment: sample
+      DeployTool: bicep
       Location: ${{ vars.LOCATION }}
       ResourceGroupName: ${{ vars.RESOURCE_GROUP_NAME }}
     secrets: 
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  
 
       
