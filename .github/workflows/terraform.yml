@@ -1,0 +1,28 @@
+name: Deployment with Terraform
+
+permissions:
+  id-token: write
+  contents: read
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  DeployWithAzCli:
+    uses: ./.github/workflows/login-and-deploy.yml
+    with:
+      Environment: sample
+      DeployTool: terraform
+      Location: ${{ vars.LOCATION }}
+      ResourceGroupName: ${{ vars.RESOURCE_GROUP_NAME }}
+    secrets: 
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  
