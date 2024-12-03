@@ -22,4 +22,4 @@ if [ -z "$location" ]; then
 fi
 
 # deploy with bicep main.bicep and main.bicepparam
-RESOURCE_GROUP_NAME=$resourceGroupName LOCATION=$location az deployment sub create --location $location --template-file main.bicep --parameters main.bicepparam
+RESOURCE_GROUP_NAME=$resourceGroupName LOCATION=$location az deployment sub create --location $location --template-file ./bicep/main.bicep --parameters ./bicep/main.bicepparam
